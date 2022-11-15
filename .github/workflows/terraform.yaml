@@ -10,9 +10,12 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [ dev, qa, shared ]
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: envs/${{ matrix.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -37,7 +40,6 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        if: github.event_name == 'pull_request'
         run: terraform plan -no-color -input=false
         continue-on-error: true
 
@@ -48,10 +50,11 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### Environment - \`${{ matrix.environment }}\`
+            #### Terraform Format and Style - \`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization - \`${{ steps.init.outcome }}\`
+            #### Terraform Validation - \`${{ steps.validate.outcome }}\`
+            #### Terraform Plan - \`${{ steps.plan.outcome }}\`
 
             <details><summary>Show Plan</summary>
 
@@ -75,5 +78,6 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        working-directory: envs/dev
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
