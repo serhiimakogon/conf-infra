@@ -3,7 +3,7 @@ resource "random_id" "cluster_suffix" {
 }
 
 resource "confluent_service_account" "ksql" {
-  display_name = "ksql"
+  display_name = "${var.cluster_prefix}_ksql"
   description  = "Service account to manage ksqldb cluster"
 }
 
