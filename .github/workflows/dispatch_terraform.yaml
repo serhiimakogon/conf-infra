@@ -8,8 +8,8 @@ on:
         description: Select the environment
 
 jobs:
-  plan:
-    name: "Plan"
+  terraform:
+    name: "Init/Validate/Plan/Apply"
     runs-on: ubuntu-latest
     defaults:
       run:

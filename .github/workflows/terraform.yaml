@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  plan:
-    name: "Plan"
+  terraform:
+    name: "Init/Validate/Plan"
     runs-on: ubuntu-latest
     strategy:
       matrix:
