@@ -1,4 +1,4 @@
-name: "Dispatch terraform"
+name: "Dispatch Terraform"
 
 on:
   workflow_dispatch:
@@ -8,8 +8,8 @@ on:
         description: Select the environment
 
 jobs:
-  plan:
-    name: "Plan"
+  terraform:
+    name: "Init / Validate /Plan / Apply"
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -45,11 +45,5 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
-  apply:
-    name: "Apply"
-    needs: ["plan"]
-    runs-on: ubuntu-latest
-    steps:
       - name: Terraform Apply
-        working-directory: envs/dev
         run: terraform apply -auto-approve -input=false
