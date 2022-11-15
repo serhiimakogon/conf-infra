@@ -7,8 +7,8 @@ on:
   pull_request:
 
 jobs:
-  terraform:
-    name: "Terraform"
+  plan:
+    name: "Plan"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -77,7 +77,12 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+  apply:
+    name: "Apply"
+    needs: ["plan"]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
       - name: Terraform Apply
         working-directory: envs/dev
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
