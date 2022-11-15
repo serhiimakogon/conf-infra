@@ -10,9 +10,12 @@ jobs:
   terraform:
     name: "Terraform"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [ dev, qa, shared ]
     defaults:
       run:
-        working-directory: envs/dev
+        working-directory: envs/${{ matrix.environment }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -74,5 +77,6 @@ jobs:
         run: exit 1
 
       - name: Terraform Apply
+        working-directory: envs/dev
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false
