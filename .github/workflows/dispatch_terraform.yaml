@@ -9,7 +9,7 @@ on:
 
 jobs:
   terraform:
-    name: "Init/Validate/Plan/Apply"
+    name: "Init / Validate /Plan / Apply"
     runs-on: ubuntu-latest
     defaults:
       run:

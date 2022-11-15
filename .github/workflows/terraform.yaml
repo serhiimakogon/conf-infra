@@ -8,7 +8,7 @@ on:
 
 jobs:
   terraform:
-    name: "Init/Validate/Plan"
+    name: "Init / Validate / Plan"
     runs-on: ubuntu-latest
     strategy:
       matrix:
